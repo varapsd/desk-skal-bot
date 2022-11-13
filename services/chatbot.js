@@ -27,7 +27,7 @@ const addEnquiry = async (name, phone) => {
 
 const addNewOrder = async (productId, from_name, from_phone ) => {
     try {
-        const data = { product_id : Number(productId), name : from_name, phone : from_name, status : "pending"};
+        const data = { product_id : Number(productId), name : from_name, phone : from_phone, status : "pending"};
         await axios.post(process.env.BACKEND_URL+"/order",data);
     } catch (error) {
         console.log(error);
