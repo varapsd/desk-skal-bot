@@ -16,6 +16,23 @@ const sendResponse = async (phone_number_id, data) => {
     }
 }
 
+const addEnquiry = async (name, phone) => {
+    try {
+        const data = { name, phone }
+        await axios.post(process.env.BACKEND_URL+"/enquiry",data );
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const addNewOrder = async (productId, from_name, from_phone ) => {
+    try {
+        const data = { product_id : productId, name : from_name, phone : from_name, status : "pending"};
+        await axios.post(process.env.BACKEND_URL+"/order",data);
+    } catch (error) {
+        console.log(error);
+    }
+}
 const getAllCategories = async (page) => {
     try {
         const { data } = await axios.get(
@@ -123,6 +140,7 @@ const initialMessage = async (req) => {
         const from_name = req.contacts[0].profile.name;
         const categoriesData = await getAllCategories(0);
         const categories = categoriesData.rows;
+        addEnquiry(from_name, from_phone_number);
 
         const rows = categories.map(product => {
             return {
@@ -296,7 +314,7 @@ const productDetailsTemplateResponse = async (req) => {
                         {
                             "type": "image",
                             "image": {
-                                "link": "https://demo-gupshup-flow.herokuapp.com/images/"+productId+".jpg"
+                                "link": process.env.IMAGE_URL+productId+".jpg"
                             }
                         }
                     ]
@@ -317,7 +335,18 @@ const productDetailsTemplateResponse = async (req) => {
                             "text": productDetailsDTO.price
                         }
                     ]
-                }
+                },
+                {
+                    "type": "button",
+                    "sub_type": "quick_reply",
+                    "index": "0",
+                    "parameters": [
+                      {
+                        "type": "payload",
+                        "payload": productId
+                      }
+                    ]
+                  }
             ]
         }
     }
@@ -334,7 +363,6 @@ const botMenu = async (req) => {
                     const page = req.messages[0].interactive.list_reply.id.split("-")[2]
                     return await sendMoreCategoriesMenu(page, req);
                 }
-                console.log("-------------------check-----------------")
                 return await productMenuResponse(req, 0);
             case "productMenu":
                 if(req.messages[0].interactive.list_reply.id.split("-")[1] == "More"){
@@ -353,11 +381,13 @@ const botMenu = async (req) => {
 
 const productDetailResponse = async (req) => {
     try {
-        const btnResponse = req.messages[0].button.payload;
+        const btnResponse = req.messages[0].button.title;
         const phone_number_id = req.metadata.phone_number_id;
         const from_phone_number = req.messages[0].from;
+        const from_name = req.contacts[0].profile.name;
         if (btnResponse == "Buy Now") {
-            //const response = await addNewOrder({productId:productId,phone: req.body.payload.sender.phone, name: req.body.payload.sender.name });
+            const productId = req.messages[0].button.payload;
+            addNewOrder(productId, from_name, from_phone_number);
             let data = {
                 messaging_product: "whatsapp",
                 to: from_phone_number,
