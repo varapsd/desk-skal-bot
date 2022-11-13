@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const sendResponse = async (phone_number_id, data) => {
     try {
-        
+        console.log('sending');
         const url = "https://graph.facebook.com/v14.0/" + phone_number_id + "/messages?access_token=" + process.env.WHATSAPP_TOKEN;
         const headers = { "Content-Type": "application/json" };
         await axios.post(url, data, { headers });
@@ -230,6 +230,7 @@ const productMenuResponse = async (req, page) => {
         }
         return await sendResponse(phone_number_id, data);
     } catch (error) {
+        console.log(error);
         return 400;
     }
 }
