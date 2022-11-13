@@ -287,7 +287,7 @@ const productDetailsTemplateResponse = async (req) => {
         "template": {
             "name": "product_details",
             "language": {
-                "code": "en"
+                "code": "en_us"
             },
             "components": [
                 {
