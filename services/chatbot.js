@@ -6,7 +6,7 @@ require("dotenv").config();
 const sendResponse = async (phone_number_id, data) => {
     try {
         
-        const url = "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages?access_token=" + process.env.WHATSAPP_TOKEN;
+        const url = "https://graph.facebook.com/v14.0/" + phone_number_id + "/messages?access_token=" + process.env.WHATSAPP_TOKEN;
         const headers = { "Content-Type": "application/json" };
         await axios.post(url, data, { headers });
         return 200;
@@ -183,7 +183,7 @@ const productMenuResponse = async (req, page) => {
         const category_id = req.messages[0].interactive.list_reply.id.split("-")[1];
         const productsData = await getProductsByCategory(category_id, page);
         const products = productsData.rows;
-
+        console.log(products);
         const rows = products.map(product => {
             return {
                 "id": "productMenu-" + product.id,
@@ -329,13 +329,14 @@ const botMenu = async (req) => {
         const listType = req.messages[0].interactive.list_reply.id.split("-")[0];
         switch (listType) {
             case "categoryMenu":
-                if(req.messages[0].interactive.list_reply.id.split("-")[1] = "More"){
+                if(req.messages[0].interactive.list_reply.id.split("-")[1] == "More"){
                     const page = req.messages[0].interactive.list_reply.id.split("-")[2]
                     return await sendMoreCategoriesMenu(page, req);
                 }
+                console.log("-------------------check-----------------")
                 return await productMenuResponse(req, 0);
             case "productMenu":
-                if(req.messages[0].interactive.list_reply.id.split("-")[1] = "More"){
+                if(req.messages[0].interactive.list_reply.id.split("-")[1] == "More"){
                     const page = req.messages[0].interactive.list_reply.id.split("-")[2]
                     return await productMenuResponse(req, page);
                 }

@@ -60,3 +60,6 @@ app.get("/webhook", (req, res) => {
         }
     }
 });
+
+// git commit -am "make it better"
+// git push heroku master
