@@ -27,7 +27,7 @@ const addEnquiry = async (name, phone) => {
 
 const addNewOrder = async (productId, from_name, from_phone ) => {
     try {
-        const data = { product_id : productId, name : from_name, phone : from_name, status : "pending"};
+        const data = { product_id : Number(productId), name : from_name, phone : from_name, status : "pending"};
         await axios.post(process.env.BACKEND_URL+"/order",data);
     } catch (error) {
         console.log(error);
@@ -381,7 +381,7 @@ const botMenu = async (req) => {
 
 const productDetailResponse = async (req) => {
     try {
-        const btnResponse = req.messages[0].button.title;
+        const btnResponse = req.messages[0].button.text;
         const phone_number_id = req.metadata.phone_number_id;
         const from_phone_number = req.messages[0].from;
         const from_name = req.contacts[0].profile.name;
