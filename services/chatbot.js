@@ -6,7 +6,7 @@ require("dotenv").config();
 const sendResponse = async (phone_number_id, data) => {
     try {
         
-        const url = "https://graph.facebook.com/v14.0/" + phone_number_id + "/messages?access_token=" + process.env.WHATSAPP_TOKEN;
+        const url = "https://graph.facebook.com/v12.0/" + phone_number_id + "/messages?access_token=" + process.env.WHATSAPP_TOKEN;
         const headers = { "Content-Type": "application/json" };
         await axios.post(url, data, { headers });
         return 200;
@@ -71,8 +71,8 @@ const sendMoreCategoriesMenu = async (page, req) => {
         const rows = categories.map(product => {
             return {
                 "id": "categoryMenu-" + product.id,
-                "title": product.name,
-                "description": product.name + " description"
+                "title": product.category_name,
+                "description": product.category_name + " description"
             }
         })
         if(categoriesData.isMoreRequired){
@@ -127,8 +127,8 @@ const initialMessage = async (req) => {
         const rows = categories.map(product => {
             return {
                 "id": "categoryMenu-" + product.id,
-                "title": product.name,
-                "description": product.name + " description"
+                "title": product.category_name,
+                "description": product.category_name + " description"
             }
         })
         if(categoriesData.isMoreRequired){
