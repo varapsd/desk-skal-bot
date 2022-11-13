@@ -192,7 +192,7 @@ const productMenuResponse = async (req, page) => {
             }
         })
 
-        if(categoriesData.isMoreRequired){
+        if(productsData.isMoreRequired){
             rows.push(
                 {
                     "id": "productMenu-More-" + nextPage,
