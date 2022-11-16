@@ -384,13 +384,17 @@ const sendConfirmationMessage = async (req) => {
                     "buttons": [
                         {
                             type : "reply",
-                            text : "Yes", 
-                            id : "Confirmation-Yes-" + productId
+                            reply : {
+                                title : "Yes", 
+                                id : "Confirmation-Yes-" + productId
+                            }
                         },
                         {
                             type : "reply",
-                            text : "No", 
-                            id : "Confirmation-No-" + productId
+                            reply : {
+                                text : "No", 
+                                id : "Confirmation-No-" + productId
+                            }
                         }
                     ]
                 }
@@ -517,7 +521,17 @@ const chatBotService = async (req) => {
                     if (replyType == "list_reply") {
                         const response = await botMenu(req.entry[0].changes[0].value);
                         return response;
-                    } else {
+                    } else if( replyType == "button_reply"){
+                        // to remove after template verfies
+                        var reqData = req.entry[0].changes[0].value;
+                        reqData.messages[0].button = {
+                            text : reqData.messages[0].interactive.button_reply.title,
+                            payload : reqData.messages[0].interactive.button_reply.id
+                        }
+                        const response = await productDetailResponse();
+                        return response;
+                    }
+                     else {
                         const response = await productDetailResponse(req.entry[0].changes[0].value);
                         return response;
                     }
