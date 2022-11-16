@@ -253,44 +253,6 @@ const productMenuResponse = async (req, page) => {
     }
 }
 
-const productDetailsResponse = async (req) => {
-    const phone_number_id = req.metadata.phone_number_id;
-    const from_phone_number = req.messages[0].from;
-    const productId = req.messages[0].interactive.list_reply.id.split("-")[1];
-    const productDetailsDTO = await getProductByProductId(productId);
-    let ImageData = {
-        messaging_product: "whatsapp",
-        to: from_phone_number,
-        type: "image",
-        image: {
-            "link": "https://demo-gupshup-flow.herokuapp.com/images/" + productId + ".jpg"
-        }
-    }
-    await sendResponse(phone_number_id, ImageData);
-    let data = {
-        messaging_product: "whatsapp",
-        to: from_phone_number,
-        type: "interactive",
-        interactive: {
-            "type": "button",
-            "body": {
-                "text": `1. Product Name :  ${productDetailsDTO.name}\n2. Product Category : ${productDetailsDTO.category}\n3. Available Quantity : ${productDetailsDTO.quantity}\n4. Available Price : ${productDetailsDTO.price}`
-            },
-            "action": {
-                "buttons": [
-                    {
-                        "type": "reply",
-                        "reply": {
-                            "id": "productDetails-" + productId,
-                            "title": "Buy"
-                        }
-                    }
-                ]
-            }
-        }
-    }
-    return await sendResponse(phone_number_id, data);
-}
 
 const productDetailsTemplateResponse = async (req) => {
     const phone_number_id = req.metadata.phone_number_id;
@@ -353,7 +315,6 @@ const productDetailsTemplateResponse = async (req) => {
     return await sendResponse(phone_number_id, data);
 }
 
-
 const botMenu = async (req) => {
     try {
         const listType = req.messages[0].interactive.list_reply.id.split("-")[0];
@@ -370,6 +331,8 @@ const botMenu = async (req) => {
                     return await productMenuResponse(req, page);
                 }
                 return await productDetailsTemplateResponse(req);
+            case "quantityMenu":
+                return await sendConfirmationMessage(req)
             default:
                 break;
         }
@@ -379,6 +342,106 @@ const botMenu = async (req) => {
     }
 }
 
+const sendConfirmationMessage = async (req) => {
+    try {
+        const phone_number_id = req.metadata.phone_number_id;
+        const from_phone_number = req.messages[0].from;
+        const productId = req.messages[0].interactive.list_reply.id.split("-")[2];
+        let data = {
+            messaging_product: "whatsapp",
+            to: from_phone_number,
+            type: "template",
+            "template": {
+                "name": "skalebot_confirmation",
+                "language": {
+                    "code": "en"
+                },
+                "components": [
+                    {
+                        "type": "button",
+                        "sub_type": "quick_reply",
+                        "index": "0",
+                        "parameters": [
+                          {
+                            "type": "payload",
+                            "payload": "Confirmation-Yes-" + productId
+                          }
+                        ]
+                      },
+                      {
+                        "type": "button",
+                        "sub_type": "quick_reply",
+                        "index": "1",
+                        "parameters": [
+                          {
+                            "type": "payload",
+                            "payload": "Confirmation-No"
+                          }
+                        ]
+                      }
+                ]
+            }
+        }
+        return await sendResponse(phone_number_id, data);
+    } catch (error) {
+        throw error;
+    }
+}
+const sendQuantity = async (req) => {
+    try {
+        const phone_number_id = req.metadata.phone_number_id;
+        const from_phone_number = req.messages[0].from;
+        const productId = req.messages[0].button.payload;
+        
+        let data = {
+            messaging_product: "whatsapp",
+            to: from_phone_number,
+            type: "interactive",
+            interactive: {
+                "type": "list",
+                "header": {
+                    "type": "text",
+                    "text": "Select Quantity"
+                },
+                "body": {
+                    "text": "select a Quantity"
+                },
+                "footer": {
+                    "text": "Quantity"
+                },
+                "action": {
+                    "button": "Quantity",
+                    "sections": [
+                        {
+                            "title": "Quantities",
+                            "rows": [
+                                {
+                                    "id": "quantityMenu-0-"+ productId,
+                                    "title": "0-100"
+                                },
+                                {
+                                    "id": "quantityMenu-1-"+ productId,
+                                    "title": "100-500"
+                                },
+                                {
+                                    "id": "quantityMenu-2-"+ productId,
+                                    "title": "500-1000"
+                                },
+                                {
+                                    "id": "quantityMenu-3-"+ productId,
+                                    "title": "1000-above"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+        return await sendResponse(phone_number_id, data);
+    } catch (error) {
+        throw error;
+    }
+}
 const productDetailResponse = async (req) => {
     try {
         const btnResponse = req.messages[0].button.text;
@@ -386,7 +449,21 @@ const productDetailResponse = async (req) => {
         const from_phone_number = req.messages[0].from;
         const from_name = req.contacts[0].profile.name;
         if (btnResponse == "Buy Now") {
-            const productId = req.messages[0].button.payload;
+            // const productId = req.messages[0].button.payload;
+            // addNewOrder(productId, from_name, from_phone_number);
+            // let data = {
+            //     messaging_product: "whatsapp",
+            //     to: from_phone_number,
+            //     type: "text",
+            //     text: {
+            //         "body": "Thank you your order is placed"
+            //     }
+            // }
+            // return await sendResponse(phone_number_id, data);
+            return await sendQuantity(req);
+        }
+        else if( btnResponse == "Yes") {
+            const productId = req.messages[0].button.payload.split("-")[2];
             addNewOrder(productId, from_name, from_phone_number);
             let data = {
                 messaging_product: "whatsapp",
