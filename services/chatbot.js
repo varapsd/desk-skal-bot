@@ -392,7 +392,7 @@ const sendConfirmationMessage = async (req) => {
                         {
                             type : "reply",
                             reply : {
-                                text : "No", 
+                                title : "No", 
                                 id : "Confirmation-No-" + productId
                             }
                         }
