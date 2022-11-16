@@ -352,7 +352,7 @@ const sendConfirmationMessage = async (req) => {
             to: from_phone_number,
             type: "template",
             "template": {
-                "name": "skalebot_confirmation",
+                "name": "confirmation_message0",
                 "language": {
                     "code": "en"
                 },
@@ -365,17 +365,6 @@ const sendConfirmationMessage = async (req) => {
                           {
                             "type": "payload",
                             "payload": "Confirmation-Yes-" + productId
-                          }
-                        ]
-                      },
-                      {
-                        "type": "button",
-                        "sub_type": "quick_reply",
-                        "index": "1",
-                        "parameters": [
-                          {
-                            "type": "payload",
-                            "payload": "Confirmation-No"
                           }
                         ]
                       }
@@ -399,15 +388,8 @@ const sendQuantity = async (req) => {
             type: "interactive",
             interactive: {
                 "type": "list",
-                "header": {
-                    "type": "text",
-                    "text": "Select Quantity"
-                },
                 "body": {
                     "text": "select a Quantity"
-                },
-                "footer": {
-                    "text": "Quantity"
                 },
                 "action": {
                     "button": "Quantity",
