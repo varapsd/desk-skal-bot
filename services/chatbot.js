@@ -347,28 +347,53 @@ const sendConfirmationMessage = async (req) => {
         const phone_number_id = req.metadata.phone_number_id;
         const from_phone_number = req.messages[0].from;
         const productId = req.messages[0].interactive.list_reply.id.split("-")[2];
+        // let data = {
+        //     messaging_product: "whatsapp",
+        //     to: from_phone_number,
+        //     type: "template",
+        //     "template": {
+        //         "name": "confirmation_message0",
+        //         "language": {
+        //             "code": "en"
+        //         },
+        //         "components": [
+        //             {
+        //                 "type": "button",
+        //                 "sub_type": "quick_reply",
+        //                 "index": "0",
+        //                 "parameters": [
+        //                   {
+        //                     "type": "payload",
+        //                     "payload": "Confirmation-Yes-" + productId
+        //                   }
+        //                 ]
+        //               }
+        //         ]
+        //     }
+        // }
         let data = {
             messaging_product: "whatsapp",
             to: from_phone_number,
-            type: "template",
-            "template": {
-                "name": "confirmation_message0",
-                "language": {
-                    "code": "en"
+            type: "interactive",
+            interactive: {
+                "type": "button",
+                "body": {
+                    "text": "Please confirm you order"
                 },
-                "components": [
-                    {
-                        "type": "button",
-                        "sub_type": "quick_reply",
-                        "index": "0",
-                        "parameters": [
-                          {
-                            "type": "payload",
-                            "payload": "Confirmation-Yes-" + productId
-                          }
-                        ]
-                      }
-                ]
+                "action": {
+                    "buttons": [
+                        {
+                            type : "reply",
+                            title : "Yes", 
+                            id : "Confirmation-Yes-" + productId
+                        },
+                        {
+                            type : "reply",
+                            title : "No", 
+                            id : "Confirmation-No-" + productId
+                        }
+                    ]
+                }
             }
         }
         return await sendResponse(phone_number_id, data);
