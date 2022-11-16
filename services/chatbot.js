@@ -528,7 +528,7 @@ const chatBotService = async (req) => {
                             text : reqData.messages[0].interactive.button_reply.title,
                             payload : reqData.messages[0].interactive.button_reply.id
                         }
-                        const response = await productDetailResponse();
+                        const response = await productDetailResponse(reqData);
                         return response;
                     }
                      else {
