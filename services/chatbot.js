@@ -384,12 +384,12 @@ const sendConfirmationMessage = async (req) => {
                     "buttons": [
                         {
                             type : "reply",
-                            title : "Yes", 
+                            text : "Yes", 
                             id : "Confirmation-Yes-" + productId
                         },
                         {
                             type : "reply",
-                            title : "No", 
+                            text : "No", 
                             id : "Confirmation-No-" + productId
                         }
                     ]
