@@ -418,7 +418,7 @@ const sendQuantity = async (req) => {
             interactive: {
                 "type": "list",
                 "body": {
-                    "text": "select a Quantity"
+                    "text": "Select a Quantity"
                 },
                 "action": {
                     "button": "Quantity",
