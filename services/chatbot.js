@@ -347,59 +347,59 @@ const sendConfirmationMessage = async (req) => {
         const phone_number_id = req.metadata.phone_number_id;
         const from_phone_number = req.messages[0].from;
         const productId = req.messages[0].interactive.list_reply.id.split("-")[2];
-        // let data = {
-        //     messaging_product: "whatsapp",
-        //     to: from_phone_number,
-        //     type: "template",
-        //     "template": {
-        //         "name": "confirmation_message0",
-        //         "language": {
-        //             "code": "en"
-        //         },
-        //         "components": [
-        //             {
-        //                 "type": "button",
-        //                 "sub_type": "quick_reply",
-        //                 "index": "0",
-        //                 "parameters": [
-        //                   {
-        //                     "type": "payload",
-        //                     "payload": "Confirmation-Yes-" + productId
-        //                   }
-        //                 ]
-        //               }
-        //         ]
-        //     }
-        // }
         let data = {
             messaging_product: "whatsapp",
             to: from_phone_number,
-            type: "interactive",
-            interactive: {
-                "type": "button",
-                "body": {
-                    "text": "Please confirm you order"
+            type: "template",
+            "template": {
+                "name": "confirmation_message0",
+                "language": {
+                    "code": "en"
                 },
-                "action": {
-                    "buttons": [
-                        {
-                            type : "reply",
-                            reply : {
-                                title : "Yes", 
-                                id : "Confirmation-Yes-" + productId
-                            }
-                        },
-                        {
-                            type : "reply",
-                            reply : {
-                                title : "No", 
-                                id : "Confirmation-No-" + productId
-                            }
-                        }
-                    ]
-                }
+                "components": [
+                    {
+                        "type": "button",
+                        "sub_type": "quick_reply",
+                        "index": "0",
+                        "parameters": [
+                          {
+                            "type": "payload",
+                            "payload": "Confirmation-Yes-" + productId
+                          }
+                        ]
+                      }
+                ]
             }
         }
+        // let data = {
+        //     messaging_product: "whatsapp",
+        //     to: from_phone_number,
+        //     type: "interactive",
+        //     interactive: {
+        //         "type": "button",
+        //         "body": {
+        //             "text": "Please confirm you order"
+        //         },
+        //         "action": {
+        //             "buttons": [
+        //                 {
+        //                     type : "reply",
+        //                     reply : {
+        //                         title : "Yes", 
+        //                         id : "Confirmation-Yes-" + productId
+        //                     }
+        //                 },
+        //                 {
+        //                     type : "reply",
+        //                     reply : {
+        //                         title : "No", 
+        //                         id : "Confirmation-No-" + productId
+        //                     }
+        //                 }
+        //             ]
+        //         }
+        //     }
+        // }
         return await sendResponse(phone_number_id, data);
     } catch (error) {
         throw error;
@@ -521,17 +521,7 @@ const chatBotService = async (req) => {
                     if (replyType == "list_reply") {
                         const response = await botMenu(req.entry[0].changes[0].value);
                         return response;
-                    } else if( replyType == "button_reply"){
-                        // to remove after template verfies
-                        var reqData = req.entry[0].changes[0].value;
-                        reqData.messages[0].button = {
-                            text : reqData.messages[0].interactive.button_reply.title,
-                            payload : reqData.messages[0].interactive.button_reply.id
-                        }
-                        const response = await productDetailResponse(reqData);
-                        return response;
-                    }
-                     else {
+                    } else {
                         const response = await productDetailResponse(req.entry[0].changes[0].value);
                         return response;
                     }
