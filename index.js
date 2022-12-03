@@ -19,7 +19,9 @@ const { chatBotService} = require("./services/chatbot");
 const port = process.env.PORT || 1337;
 app.listen(port, () => console.log("webhook is listening on port : " + port));
 
-
+app.get("/", async(req, res)=> {
+    res.json("app running. !!");
+})
 app.post("/webhook", async (req, res) => {
     // Parse the request body from the POST
     let body = req.body;
