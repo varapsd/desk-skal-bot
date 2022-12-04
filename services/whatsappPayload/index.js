@@ -8,7 +8,7 @@ var whatsappPayload = {}
 const getAllCategories = async (companyId, page) => {
     try {
         const { data } = await axios.get(
-            process.env.BACKEND_URL+"category/getActiveCategories?page="+page+"&limit=9?companyId="+companyId,
+            process.env.BACKEND_URL+"category/getActiveCategories?page="+page+"&limit=9&companyId="+companyId,
             {
                 headers: { "Content-Type": "application/json" },
             }
