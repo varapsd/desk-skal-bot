@@ -42,9 +42,9 @@ const getNextTemplateId = async (flow, currentTemplateId) => {
 
 const getMessageIds = async (req) => {
     try {
-        const msgType = req.entry[0].changes[0].value.messages[0].type;
+        const msgType = req.messages[0].type;
         if(msgType == "interactive"){
-            const replyType = req.entry[0].changes[0].value.messages[0].interactive.type;
+            const replyType = req.messages[0].interactive.type;
             if(replyType == "list_reply"){
                 return req.messages[0].interactive.list_reply.id.split("-");
             }
