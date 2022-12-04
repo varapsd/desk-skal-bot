@@ -105,10 +105,12 @@ const sendTemplateMessage = async (companyId, templateId, req, ids, page)=> {
                 case "{categories}" : {
                     const locations = variable.location.split(",");
                     data[template.type] = await assignData(data[template.type],0, locations, "{categories}", companyId, templateId, ids, page);
+                    console.log(data);
+                    console.log(JSON.stringify(data));
                 }
             }
         };
-        console.log(data.action.sections);
+        //console.log(data.action.sections);
         return await whatsappApiService.sendMessage(phone_number_id, data);
     } catch (error) {
         throw error;
