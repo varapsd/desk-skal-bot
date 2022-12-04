@@ -55,7 +55,7 @@ const getMessageIds = async (req) => {
 }
 const replaceData = async (data, index, locations, key, value) => {
     if(index == locations.length - 1 ){
-        data[location[index]] =  data[locations[index]].replace(key, value)
+        data[locations[index]] =  data[locations[index]].replace(key, value)
         return data;
     }
     data[locations[index]] = await replaceData( data[locations[index]],index+1, locations, key, value)
@@ -66,7 +66,7 @@ const assignData = async (data, index, locations, key, companyId, templateId,ids
     if(index == locations.length -1 ){
         if(key == "{categories}"){
             const categories = await whatsappPayloadService.getCategoriesPaload(companyId, templateId, page);
-            data[location[index]] = categories;
+            data[locations[index]] = categories;
             return data;
         }
         else if(key == "{products}"){
@@ -94,7 +94,7 @@ const sendTemplateMessage = async (companyId, templateId, req, ids, page)=> {
 
         data[template.type] = template.payload;
 
-        await template.variables.forEach(async (variable) => {
+        for (const variable of template.variables) {
             switch(variable.name){
                 case "{userName}" : {
                     const userName = req.contacts[0].profile.name;
@@ -109,7 +109,7 @@ const sendTemplateMessage = async (companyId, templateId, req, ids, page)=> {
                     console.log(data);
                 }
             }
-        });
+        };
         console.log(data);
         return await whatsappApiService.sendMessage(phone_number_id, data);
     } catch (error) {
