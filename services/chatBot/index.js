@@ -33,12 +33,12 @@ chatBotService.processMessage = async (req) => {
                 const companyDisplayPhoneNumber = req.entry[0].changes[0].value.metadata.display_phone_number;
                 const msgType = req.entry[0].changes[0].value.messages[0].type;
                 const reqData = req.entry[0].changes[0].value;
-                const company = await getCompanyDetails(companyDisplayPhoneNumber);
-                console.log(company)
+                const data = await getCompanyDetails(companyDisplayPhoneNumber);
+                console.log(data)
                 if(!company) return 400;
 
                 if(msgType == "text"){
-                    return await templateFlowService.sendInitialMessage(company, reqData);
+                    return await templateFlowService.sendInitialMessage(data.company, reqData);
                 }
                 else{
                     processFlow(companyId, reqData);
