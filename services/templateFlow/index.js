@@ -83,6 +83,7 @@ const assignData = async (data, index, locations, key, companyId, templateId,ids
 const sendTemplateMessage = async (companyId, templateId, req, ids, page)=> {
     try {
         const template = await getTemplate(templateId);
+        console.log(template);
         const from_phone_number = req.messages[0].from;
         const phone_number_id = req.metadata.phone_number_id;
         let data = {
@@ -93,20 +94,23 @@ const sendTemplateMessage = async (companyId, templateId, req, ids, page)=> {
 
         data[template.type] = template.payload;
 
-        template.variables.forEach(async (variable) => {
+        await template.variables.forEach(async (variable) => {
             switch(variable.name){
                 case "{userName}" : {
                     const userName = req.contacts[0].profile.name;
                     const locations = variable.location.split(",")
-                    data[template.type] = await replaceData(data[template.type],0, locations, "{userName}", userName)
+                    data[template.type] = await replaceData(data[template.type],0, locations, "{userName}", userName);
+                    console.log(data);
                     break;
                 }
                 case "{categories}" : {
                     const locations = variable.location.split(",");
                     data[template.type] = await assignData(data[template.type],0, locations, "{categories}", companyId, templateId, ids, page);
+                    console.log(data);
                 }
             }
         });
+        console.log(data);
         return await whatsappApiService.sendMessage(phone_number_id, data);
     } catch (error) {
         throw error;
