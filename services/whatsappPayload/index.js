@@ -1,4 +1,8 @@
 
+
+const axios = require("axios");
+require("dotenv").config();
+
 var whatsappPayload = {}
 
 const getAllCategories = async (companyId, page) => {

@@ -1,3 +1,7 @@
+
+const axios = require("axios");
+require("dotenv").config();
+
 const whatsappApiService = require("../whatsappApi");
 const whatsappPayloadService = require("../whatsappPayload");
 
