@@ -76,7 +76,7 @@ const assignData = async (data, index, locations, key, companyId, templateId,ids
             return data;
         }
     }
-    data[locations[index]] = await assignData( data[locations[index]],index+1, locations, key, companyId, templateId,categoryId, page)
+    data[locations[index]] = await assignData( data[locations[index]],index+1, locations, key, companyId, templateId,ids, page)
     return data;
 }
 
