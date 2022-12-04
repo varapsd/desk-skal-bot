@@ -8,7 +8,7 @@ var whatsappPayload = {}
 const getAllCategories = async (companyId, page) => {
     try {
         const { data } = await axios.get(
-            process.env.BACKEND_URL+"category/getActiveCategories?page="+page+"&limit=9",
+            process.env.BACKEND_URL+"category/getActiveCategories?page="+page+"&limit=9?companyId="+companyId,
             {
                 headers: { "Content-Type": "application/json" },
             }
@@ -22,7 +22,7 @@ const getAllCategories = async (companyId, page) => {
 const getProductsByCategory = async (companyId, id, page) => {
     try {
         const { data } = await axios.get(
-            process.env.BACKEND_URL+"product/getActiveProductsIncategory?category_id="+id+"&page="+page+"&limit=9",
+            process.env.BACKEND_URL+"product/getActiveProductsIncategory?category_id="+id+"&page="+page+"&limit=9?companyId="+companyId,
             {
                 headers: { "Content-Type": "application/json" },
             }
