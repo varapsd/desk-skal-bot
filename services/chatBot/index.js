@@ -35,7 +35,7 @@ chatBotService.processMessage = async (req) => {
                 const reqData = req.entry[0].changes[0].value;
                 const data = await getCompanyDetails(companyDisplayPhoneNumber);
                 console.log(data)
-                if(!company) return 400;
+                if(!data) return 400;
 
                 if(msgType == "text"){
                     return await templateFlowService.sendInitialMessage(data.company, reqData);
