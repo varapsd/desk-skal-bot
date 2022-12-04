@@ -34,6 +34,7 @@ chatBotService.processMessage = async (req) => {
                 const msgType = req.entry[0].changes[0].value.messages[0].type;
                 const reqData = req.entry[0].changes[0].value;
                 const company = await getCompanyDetails(companyDisplayPhoneNumber);
+                console.log(company)
                 if(!company) return 400;
 
                 if(msgType == "text"){
