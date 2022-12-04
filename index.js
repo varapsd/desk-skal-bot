@@ -14,7 +14,7 @@ const request = require("request"),
     app = express().use(body_parser.json()); // creates express http server
 
 const token = process.env.WHATSAPP_TOKEN;
-const { chatBotService} = require("./services/chatbot");
+const chatBotService = require("./services/chatBot/index");
 // Sets server port and logs message on success
 const port = process.env.PORT || 1337;
 app.listen(port, () => console.log("webhook is listening on port : " + port));
@@ -29,7 +29,7 @@ app.post("/webhook", async (req, res) => {
     // Check the Incoming webhook message
     console.log(JSON.stringify(req.body, null, 2));
 
-    const response = await chatBotService(req.body);
+    const response = await chatBotService.processMessage(req.body);
     res.sendStatus(response);
     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
 
