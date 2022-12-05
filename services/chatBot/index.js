@@ -45,9 +45,13 @@ chatBotService.processMessage = async (req) => {
                 }
             }
         }
+        else{
+            return 400;
+        }
             
     } catch (error) {
-        throw error;
+        console.log(error);
+        return 400;
     }
 }
 
