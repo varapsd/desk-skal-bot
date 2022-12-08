@@ -17,7 +17,7 @@ const sendResponse = async (phone_number_id, data) => {
 
 const getAllProducts = async () => {
     try {
-        const url = process.env.WHATSAPP_HOST + process.env.CATALOG_ID + '/products?fields=["category","name","retailer_id", "product_group"]&access_token=' + process.env.WHATSAPP_TOKEN;
+        const url = process.env.WHATSAPP_HOST + process.env.CATALOG_ID + '/products?fields=["category","name","retailer_id", "product_group"]&limit=30&access_token=' + process.env.WHATSAPP_TOKEN;
         const { data } = await axios.get(url);
         return data;
     } catch (error) {
@@ -32,7 +32,11 @@ const initialMessage = async (req) => {
     var products = await getAllProducts();
     console.log(products);
     var sections = {}
+    var i = 0;
     for (var cat of products.data) {
+        if(i == 10){
+            break;
+        }
         if (sections[cat.product_group.retailer_id] == null) {
             let req = { product_retailer_id: cat.retailer_id }
             sections[cat.product_group.retailer_id] = [req]
@@ -41,8 +45,10 @@ const initialMessage = async (req) => {
             let req = { product_retailer_id: cat.retailer_id }
             sections[cat.product_group.retailer_id].push(req)
         }
+        i+= 1;
     }
 
+    console.log(sections);
     var asections = []
     for (var sec in sections) {
         reqdata = {
@@ -51,7 +57,7 @@ const initialMessage = async (req) => {
         }
         asections.push(reqdata)
     }
-
+    console.log(asections);
     let data = {
         messaging_product: "whatsapp",
         to: from_phone_number,
@@ -104,4 +110,4 @@ const gouribrandChatbot = async (req) => {
     }
 }
 
-module.exports = { gouribrandChatbot }
+module.exports = { gouribrandChatbot, initialMessage }
