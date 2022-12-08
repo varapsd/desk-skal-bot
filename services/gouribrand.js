@@ -30,7 +30,6 @@ const initialMessage = async (req) => {
     const from_name = req.contacts[0].profile.name;
 
     var products = await getAllProducts();
-    console.log(products);
     var sections = {}
     var i = 0;
     for (var cat of products.data) {
@@ -47,8 +46,6 @@ const initialMessage = async (req) => {
         }
         i+= 1;
     }
-
-    console.log(sections);
     var asections = []
     for (var sec in sections) {
         reqdata = {
@@ -80,6 +77,7 @@ const initialMessage = async (req) => {
             }
         }
     }
+    console.log("message seding", data.toString());
     return await sendResponse(phone_number_id, data);
 }
 const gouribrandChatbot = async (req) => {
@@ -94,7 +92,10 @@ const gouribrandChatbot = async (req) => {
             const msgType = req.entry[0].changes[0].value.messages[0].type;
             switch (msgType) {
                 case "text": {
+                    console.log("sending message---------------");
+                    console.log(req.entry[0].changes[0].value.messages[0].text.body);
                     const response = await initialMessage(req.entry[0].changes[0].value)
+                    console.log(response);
                     return response;
                 }
                 case "interactive": {
