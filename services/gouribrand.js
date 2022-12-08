@@ -30,9 +30,9 @@ const initialMessage = async (req) => {
     const from_name = req.contacts[0].profile.name;
 
     var products = await getAllProducts();
-
+    console.log(products);
     var sections = {}
-    for (var cat of products) {
+    for (var cat of products.data) {
         if (sections[cat.product_group.retailer_id] == null) {
             let req = { product_retailer_id: cat.retailer_id }
             sections[cat.product_group.retailer_id] = [req]
