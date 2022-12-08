@@ -128,4 +128,22 @@ templateFlowService.sendInitialMessage = async (company, req) => {
     }
 }
 
+templateFlowService.processFlow = async (company, req) => {
+    try {
+        const ids = await getMessageIds(req);
+        let templateId = null;
+        let page = 0;
+        if(ids[ids.length - 2] == "More"){
+            templateId = Number(ids[0])
+            page = Number(ids[ids.length - 1]) + 1;
+        }
+        else{
+            templateId = await getNextTemplateId(company.templateFlow, Number(ids[0]))
+        }
+        return await sendTemplateMessage(company.id, templateId, req, ids, page);
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = templateFlowService;

@@ -40,8 +40,8 @@ chatBotService.processMessage = async (req) => {
                 if(msgType == "text"){
                     return await templateFlowService.sendInitialMessage(data.company, reqData);
                 }
-                else{
-                    processFlow(companyId, reqData);
+                else if(msgType == "interaction"){
+                    return await templateFlowService.processFlow(data.company, reqData);
                 }
             }
         }
