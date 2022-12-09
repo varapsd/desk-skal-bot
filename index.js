@@ -23,47 +23,47 @@ app.listen(port, () => console.log("webhook is listening on port : " + port));
 app.get("/", async(req, res)=> {
     try {
         
-        const reqdata = {
-            "object": "whatsapp_business_account",
-            "entry": [
-              {
-                "id": "113305784892003",
-                "changes": [
-                  {
-                    "value": {
-                      "messaging_product": "whatsapp",
-                      "metadata": {
-                        "display_phone_number": "916305846741",
-                        "phone_number_id": "104919125798337"
-                      },
-                      "contacts": [
-                        {
-                          "profile": {
-                            "name": "psd"
-                          },
-                          "wa_id": "919945320666"
-                        }
-                      ],
-                      "messages": [
-                        {
-                          "from": "919945320666",
-                          "id": "wamid.HBgMOTE5OTEyMzcyMjcyFQIAEhggQjYyN0M0NUEyRDUwNjVEMjYwRDg4RkQzNjFCNDg3QzgA",
-                          "timestamp": "1667929481",
-                          "text": {
-                            "body": "Hai world"
-                          },
-                          "type": "text"
-                        }
-                      ]
-                    },
-                    "field": "messages"
-                  }
-                ]
-              }
-            ]
-          };
+        // const reqdata = {
+        //     "object": "whatsapp_business_account",
+        //     "entry": [
+        //       {
+        //         "id": "113305784892003",
+        //         "changes": [
+        //           {
+        //             "value": {
+        //               "messaging_product": "whatsapp",
+        //               "metadata": {
+        //                 "display_phone_number": "916305846741",
+        //                 "phone_number_id": "104919125798337"
+        //               },
+        //               "contacts": [
+        //                 {
+        //                   "profile": {
+        //                     "name": "psd"
+        //                   },
+        //                   "wa_id": "919945320666"
+        //                 }
+        //               ],
+        //               "messages": [
+        //                 {
+        //                   "from": "919945320666",
+        //                   "id": "wamid.HBgMOTE5OTEyMzcyMjcyFQIAEhggQjYyN0M0NUEyRDUwNjVEMjYwRDg4RkQzNjFCNDg3QzgA",
+        //                   "timestamp": "1667929481",
+        //                   "text": {
+        //                     "body": "Hai world"
+        //                   },
+        //                   "type": "text"
+        //                 }
+        //               ]
+        //             },
+        //             "field": "messages"
+        //           }
+        //         ]
+        //       }
+        //     ]
+        //   };
 
-          await gouribrandChatbot(reqdata)
+        //   await gouribrandChatbot(reqdata)
         res.json("app running. !!");
     } catch (error) {
         console.log(error);
