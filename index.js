@@ -6,7 +6,7 @@
 // (copy token from DevX getting started page
 // and save it as environment variable into the .env file)
 require("dotenv").config();
-
+const axios = require('axios');
 // Imports dependencies and set up http server
 const request = require("request"),
     express = require("express"),
@@ -15,13 +15,60 @@ const request = require("request"),
 
 const token = process.env.WHATSAPP_TOKEN;
 const chatBotService = require("./services/chatBot/index");
-const { gouribrandChatbot } = require( "./services/gouribrand");
+const { gouribrandChatbot, initialMessage } = require( "./services/gouribrand");
 // Sets server port and logs message on success
 const port = process.env.PORT || 1337;
 app.listen(port, () => console.log("webhook is listening on port : " + port));
 
 app.get("/", async(req, res)=> {
-    res.json("app running. !!");
+    try {
+        
+        const reqdata = {
+            "object": "whatsapp_business_account",
+            "entry": [
+              {
+                "id": "113305784892003",
+                "changes": [
+                  {
+                    "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                        "display_phone_number": "916305846741",
+                        "phone_number_id": "104919125798337"
+                      },
+                      "contacts": [
+                        {
+                          "profile": {
+                            "name": "psd"
+                          },
+                          "wa_id": "919945320666"
+                        }
+                      ],
+                      "messages": [
+                        {
+                          "from": "919945320666",
+                          "id": "wamid.HBgMOTE5OTEyMzcyMjcyFQIAEhggQjYyN0M0NUEyRDUwNjVEMjYwRDg4RkQzNjFCNDg3QzgA",
+                          "timestamp": "1667929481",
+                          "text": {
+                            "body": "Hai world"
+                          },
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "field": "messages"
+                  }
+                ]
+              }
+            ]
+          };
+
+          await gouribrandChatbot(reqdata)
+        res.json("app running. !!");
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 })
 app.post("/webhook", async (req, res) => {
     // Parse the request body from the POST
@@ -32,7 +79,8 @@ app.post("/webhook", async (req, res) => {
 
     //const response = await chatBotService.processMessage(req.body);
     const response = await gouribrandChatbot(req.body);
-    res.sendStatus(response);
+    console.log(response);
+    res.sendStatus(200);
     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
 
 });
